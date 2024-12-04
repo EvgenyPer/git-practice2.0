@@ -1,0 +1,34 @@
+name: Java CI
+
+on:
+  push:
+    branches:
+       [ "*" ]
+  pull_request:
+    branches:
+      [ "*" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Проверяем репозиторий
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Устанавливаем Java JDK
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4.5.0
+        with:
+          java-version: 17 # Указываем версию Java, например, 17
+          distribution: 'temurin' # Дистрибутив Java (temurin, zulu, amazon и т.д.)
+          cache: 'gradle' # Платформа для кэширования зависимостей (gradle, maven, sbt)
+
+      # Запуск сборки проекта (пример для Gradle)
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      # Пример запуска тестов (если есть)
+      - name: Run tests
+        run: ./gradlew test
