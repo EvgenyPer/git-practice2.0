@@ -8,6 +8,6 @@ public class NewTestCheck {
 
     @Test
     void testAlwaysPasses() {
-        assertTrue(true, "This modified test always passes.");
+        assertTrue(true, "This modified test always passes!");
     }
 }
