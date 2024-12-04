@@ -1,12 +1,12 @@
-name: Java CI
+name: Java CI with Gradle
 
 on:
   push:
     branches:
-      - "*"
+      - main
   pull_request:
     branches:
-      - "*"
+      - main
 
 jobs:
   build:
@@ -21,9 +21,24 @@ jobs:
       - name: Setup Java JDK
         uses: actions/setup-java@v4.5.0
         with:
-          java-version: 17 # Указываем версию Java
-          distribution: 'temurin' # Указываем дистрибутив Java
+          java-version: 17
+          distribution: 'temurin'
 
-      # Проверяем, что Java установлена
-      - name: Verify Java installation
-        run: java -version
+      # Кэшируем зависимости Gradle
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle
+
+      # Запуск сборки Gradle
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      # Запуск тестов
+      - name: Run tests
+        run: ./gradlew test
